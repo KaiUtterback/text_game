@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import json
 
 # Constants for game settings
 SCREEN_WIDTH = 100
@@ -13,11 +14,18 @@ class Player:
         self.hp = 0
         self.mp = 0
         self.status_effects = []
-        self.location = 'b2'  # Setting the starting location
         self.inventory = []
+        self.location = 'b2'  # Setting the starting location
         self.game_over = False
 
 myPlayer = Player()
+
+# Load zone map from JSON file
+def load_zones():
+    with open('zones.json', 'r') as file:
+        return json.load(file)
+
+zone_map = load_zones()
 
 # Title Screen functions
 def title_screen_selections():
@@ -43,138 +51,16 @@ def title_screen():
     title_screen_selections()
 
 def help_menu():
+    os.system('clear')
     print('###################################')
     print("#     HELPFUL HINTS AND TIPS      #")
     print('###################################')
     print('-Use up, down, left, right to move-')
     print('  -Type your commands to do them-  ')
     print(' -Use "Look" to inspect something- ')
+    print(' -Type "inventory" to see your items-')
+    print('            - BACK -               ')
     title_screen_selections()
-
-# Game Map settings
-zone_map = {
-    'a1': {
-        'ZONENAME': 'Town Market',
-        'DESCRIPTION': 'You see stalls selling various goods.',
-        'EXAMINE': 'The market bustles with activity.',
-        'SOLVED': False,
-        'UP': '',
-        'DOWN': 'b1',
-        'LEFT': '',
-        'RIGHT': 'a2'
-    },
-    'a2': {
-        'ZONENAME': 'Town Entrance',
-        'DESCRIPTION': 'The main entrance of the town with guards watching.',
-        'EXAMINE': 'The guards seem alert and watchful.',
-        'SOLVED': False,
-        'UP': '',
-        'DOWN': 'b2',
-        'LEFT': 'a1',
-        'RIGHT': 'a3'
-    },
-    'a3': {
-        'ZONENAME': 'Town Square',
-        'DESCRIPTION': 'A vibrant and bustling square filled with people.',
-        'EXAMINE': 'There is a beautiful fountain in the center of the square.',
-        'SOLVED': False,
-        'UP': '',
-        'DOWN': 'b3',
-        'LEFT': 'a2',
-        'RIGHT': 'a4'
-    },
-    'a4': {
-        'ZONENAME': 'Town Hall',
-        'DESCRIPTION': 'The official building where the town\'s matters are managed.',
-        'EXAMINE': 'You notice the grand architecture of the town hall.',
-        'SOLVED': False,
-        'UP': '',
-        'DOWN': 'b4',
-        'LEFT': 'a3',
-        'RIGHT': ''
-    },
-    'b1': {
-        'ZONENAME': 'Town Gate',
-        'DESCRIPTION': 'The gate that leads out of the town to the northern woods.',
-        'EXAMINE': 'The gate is heavily fortified.',
-        'SOLVED': False,
-        'UP': 'a1',
-        'DOWN': 'c1',
-        'LEFT': '',
-        'RIGHT': 'b2'
-    },
-    'b2': {
-        'ZONENAME': 'Main Street',
-        'DESCRIPTION': 'The main street that runs through the center of the town.',
-        'EXAMINE': 'Shops line the street on both sides.',
-        'SOLVED': False,
-        'UP': 'a2',
-        'DOWN': 'c2',
-        'LEFT': 'b1',
-        'RIGHT': 'b3'
-    },
-    'b3': {
-        'ZONENAME': 'Library',
-        'DESCRIPTION': 'A quiet place filled with books and knowledge.',
-        'EXAMINE': 'You can spend hours exploring the wealth of books.',
-        'SOLVED': False,
-        'UP': 'a3',
-        'DOWN': 'c3',
-        'LEFT': 'b2',
-        'RIGHT': 'b4'
-    },
-    'b4': {
-        'ZONENAME': 'Museum',
-        'DESCRIPTION': 'A museum showcasing the history of the town and its surroundings.',
-        'EXAMINE': 'The artifacts from different eras tell stories of the past.',
-        'SOLVED': False,
-        'UP': 'a4',
-        'DOWN': 'c4',
-        'LEFT': 'b3',
-        'RIGHT': ''
-    },
-    'c1': {
-        'ZONENAME': 'Northern Woods',
-        'DESCRIPTION': 'Dense woods that are said to be home to mystical creatures.',
-        'EXAMINE': 'The woods are dense and dark, with a mysterious aura.',
-        'SOLVED': False,
-        'UP': 'b1',
-        'DOWN': '',
-        'LEFT': '',
-        'RIGHT': 'c2'
-    },
-    'c2': {
-        'ZONENAME': 'Forest Path',
-        'DESCRIPTION': 'A narrow path that winds through the woods.',
-        'EXAMINE': 'The path is barely visible under the overgrown foliage.',
-        'SOLVED': False,
-        'UP': 'b2',
-        'DOWN': '',
-        'LEFT': 'c1',
-        'RIGHT': 'c3'
-    },
-    'c3': {
-        'ZONENAME': 'Hermit\'s Hut',
-        'DESCRIPTION': 'A small hut where a wise old hermit lives.',
-        'EXAMINE': 'The hut is simple but cozy.',
-        'SOLVED': False,
-        'UP': 'b3',
-        'DOWN': '',
-        'LEFT': 'c2',
-        'RIGHT': 'c4'
-    },
-    'c4': {
-        'ZONENAME': 'Cliff Edge',
-        'DESCRIPTION': 'The edge of a cliff that overlooks the valley below.',
-        'EXAMINE': 'The view from here is breathtaking.',
-        'SOLVED': False,
-        'UP': 'b4',
-        'DOWN': '',
-        'LEFT': 'c3',
-        'RIGHT': ''
-    }
-}
-
 
 # Main Game Loop
 def main_game_loop():
@@ -191,17 +77,40 @@ def print_location():
 def prompt():
     print("\n=============================")
     print("What would you like to do?")
+    print("Available actions:")
+    print(" - Move (type 'move')")
+    print(" - Examine (type 'examine')")
+    print(" - Look at inventory (type 'inventory')")
+    print(" - Quit game (type 'quit')")
     action = input("> ").lower()
-    acceptable_actions = ['move', 'go', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look']
+    acceptable_actions = ['move', 'go', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look', 'inventory']
     while action not in acceptable_actions:
         print("Unknown action, try again.")
+        print("Available actions:")
+        print(" - Move (type 'move')")
+        print(" - Examine (type 'examine')")
+        print(" - Look at inventory (type 'inventory')")
+        print(" - Quit game (type 'quit')")
         action = input("> ").lower()
+    
     if action == 'quit':
         sys.exit()
     elif action in ['move', 'go', 'travel', 'walk']:
         player_move()
     elif action in ['examine', 'inspect', 'interact', 'look']:
         player_examine()
+    elif action == 'inventory':
+        show_inventory()
+
+def pickup_item():
+    location_info = zone_map[myPlayer.location]
+    if 'ITEM' in location_info and location_info['ITEM'] not in myPlayer.inventory:
+        myPlayer.inventory.append(location_info['ITEM'])
+        print(f"You have picked up {location_info['ITEM']}.")
+    else:
+        print("There is nothing here to pick up.")
+
+
 
 def player_move():
     print("Where would you like to move?")
@@ -216,18 +125,32 @@ def player_move():
         print("Invalid direction. Use up, down, left, or right.")
 
 def movement_handler(destination):
-    print("\n" + "You have moved to the " + destination + ".")
+    print("\n" + "You have moved to the " + zone_map[destination]['ZONENAME'] + ".")
     myPlayer.location = destination
     print_location()
 
 def player_examine():
-    if zone_map[myPlayer.location]['SOLVED']:
+    location_info = zone_map[myPlayer.location]
+    if location_info['SOLVED']:
         print("You have already exhausted all options here.")
     else:
-        print(zone_map[myPlayer.location]['EXAMINE'])
+        print(location_info['EXAMINE'])
+        if 'ITEM' in location_info and location_info['ITEM'] not in myPlayer.inventory:
+            print(f"You find a {items[location_info['ITEM']]['name']}. Do you want to pick it up? (yes/no)")
+            choice = input("> ").lower()
+            if choice == 'yes':
+                myPlayer.inventory.append(location_info['ITEM'])
+                print(f"You picked up the {items[location_info['ITEM']]['name']}.")
+
+def show_inventory():
+    if myPlayer.inventory:
+        print("You are carrying:")
+        for item in myPlayer.inventory:
+            print(f"- {item}")
+    else:
+        print("Your inventory is empty.")
 
 def setup_game():
-    # Initialization and role selection
     os.system('cls')
     question1 = "Hello, what is your name traveler?\n"
     for character in question1:
@@ -247,7 +170,6 @@ def setup_game():
         print("Please choose a valid role.")
         player_job = input("> ").lower()
     myPlayer.job = player_job
-
     if player_job == 'warrior':
         myPlayer.hp = 120
         myPlayer.mp = 20
@@ -258,8 +180,9 @@ def setup_game():
         myPlayer.hp = 60
         myPlayer.mp = 60
 
-    # Start the game after setup
+    print("########################")
+    print("#     LET IT BEGIN     #")
+    print("########################")
     main_game_loop()
 
-# Starting the game
 title_screen()

@@ -1,0 +1,130 @@
+{
+    "a1": {
+        "ZONENAME": "Town Market",
+        "DESCRIPTION": "You see stalls selling various goods.",
+        "EXAMINE": "You notice something shiny under a stall.",
+        "SOLVED": false,
+        "ITEM": "gold coin",
+        "UP": "",
+        "DOWN": "b1",
+        "LEFT": "",
+        "RIGHT": "a2"
+    },
+    "a2": {
+        "ZONENAME": "Town Entrance",
+        "DESCRIPTION": "The main entrance of the town with guards watching.",
+        "EXAMINE": "The guards seem alert and watchful.",
+        "SOLVED": false,
+        "UP": "",
+        "DOWN": "b2",
+        "LEFT": "a1",
+        "RIGHT": "a3"
+    },
+    "a3": {
+        "ZONENAME": "Town Square",
+        "DESCRIPTION": "A bustling center of activity, filled with vendors and townsfolk.",
+        "EXAMINE": "There's a lost wallet on the ground.",
+        "SOLVED": false,
+        "ITEM": "wallet",
+        "UP": "",
+        "DOWN": "b3",
+        "LEFT": "a2",
+        "RIGHT": "a4"
+    },
+    "a4": {
+        "ZONENAME": "Town Hall",
+        "DESCRIPTION": "A grand building where the town's decisions are made.",
+        "EXAMINE": "A key is left unattended on a bench.",
+        "SOLVED": false,
+        "ITEM": "key",
+        "UP": "",
+        "DOWN": "b4",
+        "LEFT": "a3",
+        "RIGHT": ""
+    },
+    "b1": {
+        "ZONENAME": "Town Gate",
+        "DESCRIPTION": "The gate that leads out of the town to the northern woods.",
+        "EXAMINE": "The gate is heavily fortified.",
+        "SOLVED": false,
+        "UP": "a1",
+        "DOWN": "c1",
+        "LEFT": "",
+        "RIGHT": "b2"
+    },
+    "b2": {
+        "ZONENAME": "Home",
+        "DESCRIPTION": "This is your home.",
+        "EXAMINE": "Your home looks the same as always - Nothing has changed.",
+        "SOLVED": true,
+        "UP": "a2",
+        "DOWN": "c2",
+        "LEFT": "b1",
+        "RIGHT": "b3"
+    },
+    "b3": {
+        "ZONENAME": "Local Library",
+        "DESCRIPTION": "A quiet place filled with books and knowledge.",
+        "EXAMINE": "A rare book has been misplaced on a reading table.",
+        "SOLVED": false,
+        "ITEM": "rare book",
+        "UP": "a3",
+        "DOWN": "c3",
+        "LEFT": "b2",
+        "RIGHT": "b4"
+    },
+    "b4": {
+        "ZONENAME": "Museum",
+        "DESCRIPTION": "A place where the town's history and artifacts are preserved.",
+        "EXAMINE": "An ancient coin is on display in a less secure case.",
+        "SOLVED": false,
+        "ITEM": "ancient coin",
+        "UP": "a4",
+        "DOWN": "c4",
+        "LEFT": "b3",
+        "RIGHT": ""
+    },
+    "c1": {
+        "ZONENAME": "Northern Woods",
+        "DESCRIPTION": "Dense woods that are said to be home to mystical creatures.",
+        "EXAMINE": "You find a hidden path leading deeper into the woods.",
+        "SOLVED": false,
+        "UP": "b1",
+        "DOWN": "",
+        "LEFT": "",
+        "RIGHT": "c2"
+    },
+    "c2": {
+        "ZONENAME": "Hidden Glade",
+        "DESCRIPTION": "A secret clearing in the woods known to few.",
+        "EXAMINE": "There's a mysterious glowing herb here.",
+        "SOLVED": false,
+        "ITEM": "glowing herb",
+        "UP": "b2",
+        "DOWN": "",
+        "LEFT": "c1",
+        "RIGHT": "c3"
+    },
+    "c3": {
+        "ZONENAME": "Hermit's Hut",
+        "DESCRIPTION": "A small hut where a wise old hermit lives.",
+        "EXAMINE": "The hermit offers you a potion for your journey.",
+        "SOLVED": false,
+        "ITEM": "healing potion",
+        "UP": "b3",
+        "DOWN": "",
+        "LEFT": "c2",
+        "RIGHT": "c4"
+    },
+    "c4": {
+        "ZONENAME": "Cliff Edge",
+        "DESCRIPTION": "The edge of a cliff that overlooks the valley below.",
+        "EXAMINE": "You see an eagle’s nest with something shiny in it.",
+        "SOLVED": false,
+        "ITEM": "silver bracelet",
+        "UP": "b4",
+        "DOWN": "",
+        "LEFT": "c3",
+        "RIGHT": ""
+    }
+}
