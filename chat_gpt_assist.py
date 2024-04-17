@@ -110,19 +110,36 @@ def pickup_item():
     else:
         print("There is nothing here to pick up.")
 
-
-
 def player_move():
+    location_info = zone_map[myPlayer.location]
+    available_directions = {"north": "UP", "south": "DOWN", "east": "RIGHT", "west": "LEFT"}
+    valid_moves = []
+
     print("Where would you like to move?")
+    print("Available directions:")
+
+    # Iterate over possible directions and print available ones
+    for direction, key in available_directions.items():
+        if location_info.get(key):  # Check if the key has a non-empty destination
+            valid_moves.append(direction)
+            destination_zone = location_info[key]
+            print(f" - {direction.capitalize()} (to {zone_map[destination_zone]['ZONENAME']})")
+
+    if not valid_moves:
+        print("There are no available moves from here.")
+        return
+
     move = input("> ").lower()
-    if move in ['up', 'north', 'down', 'south', 'left', 'west', 'right', 'east']:
-        destination = zone_map[myPlayer.location][move.upper()]
-        if destination == '':
-            print("You can't go that way.")
-        else:
-            movement_handler(destination)
-    else:
-        print("Invalid direction. Use up, down, left, or right.")
+    while move not in valid_moves:
+        print("Invalid direction. Choose from the available options:")
+        for move in valid_moves:
+            destination_zone = location_info[available_directions[move]]
+            print(f" - {move.capitalize()} (to {zone_map[destination_zone]['ZONENAME']})")
+        move = input("> ").lower()
+
+    destination = location_info[available_directions[move]]
+    movement_handler(destination)
+
 
 def movement_handler(destination):
     print("\n" + "You have moved to the " + zone_map[destination]['ZONENAME'] + ".")
