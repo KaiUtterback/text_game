@@ -81,22 +81,23 @@ def print_location():
     print('# ' + zone_map[myPlayer.location]['DESCRIPTION'] + ' #')
 
 def prompt():
-    print("=============================")
+    location_info = zone_map[myPlayer.location]
+    print("\n=============================")
+    print(f"You are at the {location_info['ZONENAME']}.")
     print("What would you like to do?")
     print("Available actions:")
     print(" - Move (type 'move')")
     print(" - Examine (type 'examine')")
-    print(" - Look at inventory (type 'inventory')")
+    if myPlayer.inventory:
+        print(" - Look at inventory (type 'inventory')")
+    if 'ITEM' in location_info and location_info['ITEM'] not in myPlayer.inventory:
+        print(f" - Pick up {location_info['ITEM']} (type 'pickup')")
     print(" - Quit game (type 'quit')")
+    
     action = input("> ").lower()
-    acceptable_actions = ['move', 'go', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look', 'inventory']
+    acceptable_actions = ['move', 'go', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look', 'inventory', 'pickup']
     while action not in acceptable_actions:
         print("Unknown action, try again.")
-        print("Available actions:")
-        print(" - Move (type 'move')")
-        print(" - Examine (type 'examine')")
-        print(" - Look at inventory (type 'inventory')")
-        print(" - Quit game (type 'quit')")
         action = input("> ").lower()
     
     if action == 'quit':
@@ -105,11 +106,12 @@ def prompt():
         clear_screen()
         player_move()
     elif action in ['examine', 'inspect', 'interact', 'look']:
-        clear_screen()
         player_examine()
     elif action == 'inventory':
-        clear_screen()
         show_inventory()
+    elif action == 'pickup':
+        pickup_item()
+
 
 def pickup_item():
     location_info = zone_map[myPlayer.location]
@@ -156,6 +158,15 @@ def movement_handler(destination):
     clear_screen()
     print_location()
 
+# Load items from JSON file
+def load_items():
+    with open('items.json', 'r') as file:
+        return json.load(file)
+
+# Define items dictionary
+items = load_items()
+
+# Update player_examine function
 def player_examine():
     location_info = zone_map[myPlayer.location]
     if location_info['SOLVED']:
@@ -163,19 +174,25 @@ def player_examine():
     else:
         print(location_info['EXAMINE'])
         if 'ITEM' in location_info and location_info['ITEM'] not in myPlayer.inventory:
-            print(f"You find a {items[location_info['ITEM']]['name']}. Do you want to pick it up? (yes/no)")
-            choice = input("> ").lower()
-            if choice == 'yes':
-                myPlayer.inventory.append(location_info['ITEM'])
-                print(f"You picked up the {items[location_info['ITEM']]['name']}.")
+            item_name = location_info['ITEM']
+            if item_name in items:
+                print(f"You find a {items[item_name]['name']}. Do you want to pick it up? (yes/no)")
+                choice = input("> ").lower()
+                if choice == 'yes':
+                    myPlayer.inventory.append(item_name)
+                    print(f"You picked up the {items[item_name]['name']}.")
+            else:
+                print(f"Error: Item '{item_name}' not found in items dictionary.")
+        else:
+            print("There is nothing here to pick up.")
 
+# Function to show inventory
 def show_inventory():
-    if myPlayer.inventory:
-        print("You are carrying:")
-        for item in myPlayer.inventory:
-            print(f"- {item}")
-    else:
-        print("Your inventory is empty.")
+    print("You are carrying:")
+    for item_name in myPlayer.inventory:
+        if item_name in items:
+            print(f"- {items[item_name]['name']}: {items[item_name]['description']}")
+
 
 def setup_game():
     clear_screen()
