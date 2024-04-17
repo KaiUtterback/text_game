@@ -25,10 +25,12 @@ screen_width = 100
 class Player:
     def __init__(self):
         self.name = ''
+        self.job = '' # This is where you could create a character class system
         self.hp = 0
         self.mp = 0
         self.status_effects = []
         self.location = 'start'
+        self.game_over = False
         
 myPlayer = Player()
         
@@ -189,9 +191,10 @@ zone_map = {
 # Game Interactivity
 def print_location():
     print('\n' + ('#' * (4 + len(myPlayer.location))))
-    print('# ' + myPlayer.loction.upper + ' #')
-    print('# ' + zone_map[myPlayer.location][DESCRIPTION] ' #')
+    print('# ' + myPlayer.location.upper() + ' #')
+    print('# ' + zone_map[myPlayer.location][DESCRIPTION] + ' #')
     print('\n' + ('#' * (4 + len(myPlayer.location))))
+
     
 def prompt():
     print("\n =============================")
@@ -215,16 +218,120 @@ def player_move(myAction):
         destination = zone_map[myPlayer.location](UP)
         movement_handler(destination)
     elif dest in ['left', 'west']:
-        
+        destination = zone_map[myPlayer.location](LEFT)
+        movement_handler(destination)
+    elif dest in ['right', 'east']:
+        destination = zone_map[myPlayer.location](RIGHT)
+        movement_handler(destination)
+    elif dest in ['down', 'south']:
+        destination = zone_map[myPlayer.location](DOWN)
+        movement_handler(destination)
+
 
 def movement_handler(destination):
     print("\n" + "You have moved to the " + destination + ",")
     myPlayer.location = destination
     print_location()
     
+def player_examine(action):
+    if zone_map[myPlayer.location](SOLVED):
+        print("You have already exhausted all options in this zone.")
+    else:
+        print("You can do something here")
     
     
 # Game funcionality
 
 def start_game():
     pass
+
+
+# Main Game Loop
+
+def main_game_loop():
+    while myPlayer.game_over is False:
+        prompt()
+
+def setup_game():
+    os.system('clear')
+
+    question1 = "Hello, what is your name traveler?\n"
+    for character in question1:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.05)
+    player_name = input("> ")
+    myPlayer.name = player_name
+
+    question2 = "What role do you want to play?\n"
+    question2_additional = ("Choose: Warrior, Mage, or Priest\n")
+    for character in question2:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.05)
+    for character in question2_additional:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.01)
+    player_job = input("> ").lower
+    valid_jobs = ['warrior', 'mage', 'priest']
+    if player_job in valid_jobs:
+        myPlayer.job = player_job
+        print(f"Class {player_job} assigned")
+    while player_job not in valid_jobs:
+        print("Incorrect Entry.")
+        player_job = input("> ")
+        if player_job in valid_jobs:
+            myPlayer.job = player_job
+            print(f"Class {player_job} assigned")
+
+    if myPlayer.job is 'warrior':
+        self.hp = 120
+        self.mp = 20
+    elif myPlayer.job is 'mage':
+        self.hp = 40
+        self.mp = 120
+    elif myPlayer.job is 'priest':
+        self.hp = 60
+        self.mp = 60
+
+    question3 = f"Welcome {player_name} the {player_job}.\n"
+    for character in question3:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.05)
+    player_name = input("> ")
+    myPlayer.name = player_name
+    
+    speech1 = "Welcome to this fantasy world"
+    speech2 = "I hope it greets you well!"
+    speech3 = "Just make sure you don't get lost....."
+    speech4 = "Dangerous things can be found in the dark........"
+
+    for character in speech1:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.03)
+    for character in speech2:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.03)
+    for character in speech3:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.1)
+    for character in speech4:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.2)
+
+    os.system('clear')
+    print("########################")
+    print("#     LET IT BEGIN     #")
+    print("########################")
+    main_game_loop()
+
+
+
+
+title_screen() # Here handle if puzles have been solved, boss defeated, explored everything, etc...
