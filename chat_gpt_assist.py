@@ -41,7 +41,7 @@ def title_screen_selections():
         sys.exit()
 
 def title_screen():
-    os.system('cls')
+    clear_screen()
     print('###################################')
     print("# WELCOME TO KAI'S TEXT ADVENTURE #")
     print('###################################')
@@ -51,7 +51,7 @@ def title_screen():
     title_screen_selections()
 
 def help_menu():
-    os.system('clear')
+    clear_screen()
     print('###################################')
     print("#     HELPFUL HINTS AND TIPS      #")
     print('###################################')
@@ -62,6 +62,14 @@ def help_menu():
     print('            - BACK -               ')
     title_screen_selections()
 
+def clear_screen():
+    # Check if the operating system is Windows
+    if os.name == 'nt':
+        os.system('cls')  # Clears the screen on Windows
+    else:
+        os.system('clear')  # Clears the screen on Unix/Linux/Mac
+
+
 # Main Game Loop
 def main_game_loop():
     while not myPlayer.game_over:
@@ -69,13 +77,11 @@ def main_game_loop():
 
 # Game Functionalities
 def print_location():
-    print('\n' + ('#' * (4 + len(myPlayer.location))))
     print('# ' + zone_map[myPlayer.location]['ZONENAME'] + ' #')
     print('# ' + zone_map[myPlayer.location]['DESCRIPTION'] + ' #')
-    print('\n' + ('#' * (4 + len(myPlayer.location))))
 
 def prompt():
-    print("\n=============================")
+    print("=============================")
     print("What would you like to do?")
     print("Available actions:")
     print(" - Move (type 'move')")
@@ -96,10 +102,13 @@ def prompt():
     if action == 'quit':
         sys.exit()
     elif action in ['move', 'go', 'travel', 'walk']:
+        clear_screen()
         player_move()
     elif action in ['examine', 'inspect', 'interact', 'look']:
+        clear_screen()
         player_examine()
     elif action == 'inventory':
+        clear_screen()
         show_inventory()
 
 def pickup_item():
@@ -144,6 +153,7 @@ def player_move():
 def movement_handler(destination):
     print("\n" + "You have moved to the " + zone_map[destination]['ZONENAME'] + ".")
     myPlayer.location = destination
+    clear_screen()
     print_location()
 
 def player_examine():
@@ -168,7 +178,7 @@ def show_inventory():
         print("Your inventory is empty.")
 
 def setup_game():
-    os.system('cls')
+    clear_screen()
     question1 = "Hello, what is your name traveler?\n"
     for character in question1:
         sys.stdout.write(character)
@@ -200,6 +210,7 @@ def setup_game():
     print("########################")
     print("#     LET IT BEGIN     #")
     print("########################")
+    clear_screen()
     main_game_loop()
 
 title_screen()
